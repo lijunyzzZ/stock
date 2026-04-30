@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "money-stock-cli"
+version = "0.1.0"
+description = "A-share holdings and watchlist command-line monitor"
+requires-python = ">=3.10"
+
+[project.scripts]
+stock = "money.cli:main"
+

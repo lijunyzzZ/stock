@@ -18,6 +18,24 @@ def color_change(change_pct: float) -> str:
     return value
 
 
+def color_price(price: float, change_pct: float) -> str:
+    value = f"{price:.2f}"
+    if change_pct > 0:
+        return f"{GREEN}{value}{RESET}"
+    if change_pct < 0:
+        return f"{RED}{value}{RESET}"
+    return value
+
+
+def color_profit(value: float) -> str:
+    text = f"{value:+.2f}"
+    if value > 0:
+        return f"{RED}{text}{RESET}"
+    if value < 0:
+        return f"{GREEN}{text}{RESET}"
+    return text
+
+
 def render_quotes(rows: list[dict], include_time: bool = False) -> str:
     lines: list[str] = []
     if include_time:
@@ -36,7 +54,7 @@ def render_quotes(rows: list[dict], include_time: bool = False) -> str:
                     [
                         row["symbol"][2:],
                         row["name"],
-                        f"{row['price']:.2f}",
+                        color_price(row["price"], row["change_pct"]),
                         color_change(row["change_pct"]),
                         _format_optional(row.get("shares")),
                         _format_optional(row.get("cost")),
@@ -44,6 +62,9 @@ def render_quotes(rows: list[dict], include_time: bool = False) -> str:
                     ]
                 )
             )
+        total_profit = _total_profit(holding_rows)
+        if total_profit is not None:
+            lines.append(f"总盈亏：{color_profit(total_profit)}")
     else:
         lines.append("暂无持仓")
 
@@ -57,7 +78,7 @@ def render_quotes(rows: list[dict], include_time: bool = False) -> str:
                     [
                         row["symbol"][2:],
                         row["name"],
-                        f"{row['price']:.2f}",
+                        color_price(row["price"], row["change_pct"]),
                         color_change(row["change_pct"]),
                     ]
                 )
@@ -99,4 +120,11 @@ def _format_optional(value: object) -> str:
 def _format_profit(value: float | None) -> str:
     if value is None:
         return ""
-    return f"{value:+.2f}"
+    return color_profit(value)
+
+
+def _total_profit(rows: list[dict]) -> float | None:
+    values = [row["profit"] for row in rows if row.get("profit") is not None]
+    if not values:
+        return None
+    return sum(values)

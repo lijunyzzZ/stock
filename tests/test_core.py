@@ -100,7 +100,7 @@ class ProviderTests(unittest.TestCase):
 
 
 class RenderTests(unittest.TestCase):
-    def test_render_uses_red_for_gain_green_for_loss_and_omits_position_for_watchlist(self):
+    def test_render_uses_expected_colors_and_omits_position_for_watchlist(self):
         rows = [
             {
                 "section": "holding",
@@ -123,11 +123,45 @@ class RenderTests(unittest.TestCase):
 
         output = render_quotes(rows)
 
+        self.assertIn(f"{GREEN}1716.80{RESET}", output)
         self.assertIn(f"{RED}+2.19%{RESET}", output)
+        self.assertIn(f"{RED}+433.60{RESET}", output)
+        self.assertIn(f"总盈亏：{RED}+433.60{RESET}", output)
+        self.assertIn(f"{RED}180.00{RESET}", output)
         self.assertIn(f"{GREEN}-1.23%{RESET}", output)
         watch_section = output.split("观测列表", 1)[1]
         self.assertNotIn("持仓", watch_section.splitlines()[1])
         self.assertNotIn("成本", watch_section.splitlines()[1])
+
+    def test_render_totals_multiple_holding_profits_and_colors_loss_green(self):
+        rows = [
+            {
+                "section": "holding",
+                "symbol": "sh600585",
+                "name": "海螺水泥",
+                "price": 21.18,
+                "change_pct": -0.38,
+                "shares": 1900,
+                "cost": 21.3,
+                "profit": -228.0,
+            },
+            {
+                "section": "holding",
+                "symbol": "sz000001",
+                "name": "平安银行",
+                "price": 10.0,
+                "change_pct": 0.0,
+                "shares": 100,
+                "cost": 11.0,
+                "profit": -100.0,
+            },
+        ]
+
+        output = render_quotes(rows)
+
+        self.assertIn(f"{RED}21.18{RESET}", output)
+        self.assertIn(f"{GREEN}-228.00{RESET}", output)
+        self.assertIn(f"总盈亏：{GREEN}-328.00{RESET}", output)
 
     def test_render_aligns_columns_with_chinese_names_and_color_codes(self):
         rows = [

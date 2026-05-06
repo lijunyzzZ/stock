@@ -108,6 +108,7 @@ class RenderTests(unittest.TestCase):
                 "name": "贵州茅台",
                 "price": 1716.8,
                 "change_pct": 2.19,
+                "previous_close": 1680.0,
                 "shares": 2,
                 "cost": 1500,
                 "profit": 433.6,
@@ -126,7 +127,9 @@ class RenderTests(unittest.TestCase):
         self.assertIn(f"{GREEN}1716.80{RESET}", output)
         self.assertIn(f"{RED}+2.19%{RESET}", output)
         self.assertIn(f"{RED}+433.60{RESET}", output)
+        self.assertIn(f"今日盈亏：{RED}+73.60{RESET}", output)
         self.assertIn(f"总盈亏：{RED}+433.60{RESET}", output)
+        self.assertLess(output.index("今日盈亏："), output.index("总盈亏："))
         self.assertIn(f"{RED}180.00{RESET}", output)
         self.assertIn(f"{GREEN}-1.23%{RESET}", output)
         watch_section = output.split("观测列表", 1)[1]
@@ -141,6 +144,7 @@ class RenderTests(unittest.TestCase):
                 "name": "海螺水泥",
                 "price": 21.18,
                 "change_pct": -0.38,
+                "previous_close": 21.26,
                 "shares": 1900,
                 "cost": 21.3,
                 "profit": -228.0,
@@ -151,6 +155,7 @@ class RenderTests(unittest.TestCase):
                 "name": "平安银行",
                 "price": 10.0,
                 "change_pct": 0.0,
+                "previous_close": 10.0,
                 "shares": 100,
                 "cost": 11.0,
                 "profit": -100.0,
@@ -161,6 +166,7 @@ class RenderTests(unittest.TestCase):
 
         self.assertIn(f"{RED}21.18{RESET}", output)
         self.assertIn(f"{GREEN}-228.00{RESET}", output)
+        self.assertIn(f"今日盈亏：{GREEN}-152.00{RESET}", output)
         self.assertIn(f"总盈亏：{GREEN}-328.00{RESET}", output)
 
     def test_render_aligns_columns_with_chinese_names_and_color_codes(self):

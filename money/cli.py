@@ -167,6 +167,7 @@ def build_rows(store: PortfolioStore, quotes: dict[str, Quote]) -> list[dict]:
                 "name": quote.name,
                 "price": quote.price,
                 "change_pct": quote.change_pct,
+                "previous_close": quote.previous_close,
                 "shares": shares,
                 "cost": cost,
                 "profit": profit,

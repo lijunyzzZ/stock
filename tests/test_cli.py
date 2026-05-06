@@ -42,6 +42,8 @@ class CliTests(unittest.TestCase):
             text = output.getvalue()
             self.assertIn("持仓列表", text)
             self.assertIn("观测列表", text)
+            self.assertIn("今日盈亏", text)
+            self.assertIn("73.60", text)
             self.assertIn("433.60", text)
             self.assertIn("\033[31m+2.19%\033[0m", text)
             self.assertIn("\033[32m-1.23%\033[0m", text)

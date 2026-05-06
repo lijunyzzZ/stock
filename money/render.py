@@ -63,6 +63,9 @@ def render_quotes(rows: list[dict], include_time: bool = False) -> str:
                 )
             )
         total_profit = _total_profit(holding_rows)
+        today_profit = _today_profit(holding_rows)
+        if today_profit is not None:
+            lines.append(f"今日盈亏：{color_profit(today_profit)}")
         if total_profit is not None:
             lines.append(f"总盈亏：{color_profit(total_profit)}")
     else:
@@ -125,6 +128,17 @@ def _format_profit(value: float | None) -> str:
 
 def _total_profit(rows: list[dict]) -> float | None:
     values = [row["profit"] for row in rows if row.get("profit") is not None]
+    if not values:
+        return None
+    return sum(values)
+
+
+def _today_profit(rows: list[dict]) -> float | None:
+    values = [
+        (row["price"] - row["previous_close"]) * row["shares"]
+        for row in rows
+        if row.get("shares") is not None and row.get("previous_close") is not None
+    ]
     if not values:
         return None
     return sum(values)

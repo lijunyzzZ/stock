@@ -21,9 +21,9 @@ def color_change(change_pct: float) -> str:
 def color_price(price: float, change_pct: float) -> str:
     value = f"{price:.2f}"
     if change_pct > 0:
-        return f"{GREEN}{value}{RESET}"
-    if change_pct < 0:
         return f"{RED}{value}{RESET}"
+    if change_pct < 0:
+        return f"{GREEN}{value}{RESET}"
     return value
 
 

@@ -124,13 +124,13 @@ class RenderTests(unittest.TestCase):
 
         output = render_quotes(rows)
 
-        self.assertIn(f"{GREEN}1716.80{RESET}", output)
+        self.assertIn(f"{RED}1716.80{RESET}", output)
         self.assertIn(f"{RED}+2.19%{RESET}", output)
         self.assertIn(f"{RED}+433.60{RESET}", output)
         self.assertIn(f"今日盈亏：{RED}+73.60{RESET}", output)
         self.assertIn(f"总盈亏：{RED}+433.60{RESET}", output)
         self.assertLess(output.index("今日盈亏："), output.index("总盈亏："))
-        self.assertIn(f"{RED}180.00{RESET}", output)
+        self.assertIn(f"{GREEN}180.00{RESET}", output)
         self.assertIn(f"{GREEN}-1.23%{RESET}", output)
         watch_section = output.split("观测列表", 1)[1]
         self.assertNotIn("持仓", watch_section.splitlines()[1])
@@ -164,7 +164,7 @@ class RenderTests(unittest.TestCase):
 
         output = render_quotes(rows)
 
-        self.assertIn(f"{RED}21.18{RESET}", output)
+        self.assertIn(f"{GREEN}21.18{RESET}", output)
         self.assertIn(f"{GREEN}-228.00{RESET}", output)
         self.assertIn(f"今日盈亏：{GREEN}-152.00{RESET}", output)
         self.assertIn(f"总盈亏：{GREEN}-328.00{RESET}", output)
